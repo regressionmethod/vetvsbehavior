@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet vs. Behavior Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .value-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .quick-decision {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .decision-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .emergency-alert {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+
+        .decision-path {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .path-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .path-card.vet {
+            border-color: #ff6b6b;
+        }
+
+        .path-card.behavior {
+            border-color: #667eea;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .path-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vet-path .path-header {
+            color: #ff6b6b;
+        }
+
+        .behavior-path .path-header {
+            color: #667eea;
+        }
+
+        .symptom-checker {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .checker-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .symptom-category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .symptom-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+            border-left-color: #667eea;
+        }
+
+        .symptom-item.selected {
+            background: rgba(102, 126, 234, 0.1);
+            border-left-color: #667eea;
+        }
+
+        .symptom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .symptom-item.selected .symptom-checkbox {
+            background: #667eea;
+            color: white;
+        }
+
+        .urgency-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .urgency-high { background: #ff6b6b; }
+        .urgency-medium { background: #ffa726; }
+        .urgency-low { background: #66bb6a; }
+
+        .results-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .results-panel.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-recommendation {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid;
+        }
+
+        .result-vet {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+        }
+
+        .result-behavior {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+        }
+
+        .result-mixed {
+            background: rgba(255, 167, 38, 0.1);
+            border-color: #ffa726;
+        }
+
+        .result-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-steps {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .action-steps li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .vet-communication {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .communication-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .script-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            margin: 15px 0;
+        }
+
+        .script-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .script-text {
+            font-style: italic;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .timeline-guide {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .timeline-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .timeline-description {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .calculate-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .calculate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .print-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .print-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .decision-path {
+                grid-template-columns: 1fr;
+            }
+            
+            .symptom-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .print-button {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .print-button {
+                display: none;
+            }
+            
+            .quick-decision, .symptom-checker, .results-panel, .vet-communication, .timeline-guide {
+                background: white;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Vet vs. Behavior Guide</h1>
+            <p class="subtitle">Know when it's medical vs. behavioral — save time, money, and stress</p>
+            <div class="value-badge">Value: $29 • Instant Clarity</div>
+        </div>
+
+        <div class="quick-decision">
+            <div class="decision-title">
+                <span>⚡</span>
+                Quick Decision Tool
+            </div>
+
+            <div class="emergency-alert">
+                <span style="font-size: 2rem;">🚨</span>
+                <div>
+                    <strong>EMERGENCY - GO TO VET NOW:</strong><br>
+                    Difficulty breathing, seizures, unconsciousness, severe injury, suspected poisoning, bloated abdomen, or extreme lethargy.
+                </div>
+            </div>
+
+            <div class="decision-path">
+                <div class="path-card vet-path">
+                    <div class="path-header">
+                        <span>🏥</span>
+                        Likely VET VISIT Needed
+                    </div>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 8px;">• Sudden behavior changes</li>
+                        <li style="margin-bottom: 8px;">• Physical symptoms present</li>
+                        <li style="margin-bottom: 8px;">• Age-related changes (senior dogs)</li>
+                        <li style="margin-bottom: 8px;">• Pain indicators</li>
+                        <li style="margin-bottom: 8px;">• Eating/drinking changes</li>
+                    </ul>
+                </div>
+
+                <div class="path-card behavior-path">
+                    <div class="path-header">
+                        <span>🧠</span>
+                        Likely BEHAVIOR Issue
+                    </div>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 8px;">• Gradual behavior changes</li>
+                        <li style="margin-bottom: 8px;">• Triggered by environment</li>
+                        <li style="margin-bottom: 8px;">• No physical symptoms</li>
+                        <li style="margin-bottom: 8px;">• Related to schedule/routine</li>
+                        <li style="margin-bottom: 8px;">• Responds to training cues</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="symptom-checker">
+            <div class="checker-title">
+                <span>🔍</span>
+                Detailed Symptom Checker
+            </div>
+            <p style="text-align: center; color: #7f8c8d; margin-bottom: 30px;">Check all symptoms your dog is showing. We'll help you decide next steps.</p>
+
+            <div class="symptom-category">
+                <div class="category-title">
+                    <span>🚨</span>
+                    High Priority - Vet Likely Needed
+                </div>
+                <div class="symptom-grid">
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="high">
+                        <div class="symptom-checkbox"></div>
+                        <div>Sudden loss of appetite (24+ hours)</div>
+                        <div class="urgency-indicator urgency-high"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="high">
+                        <div class="symptom-checkbox"></div>
+                        <div>Vomiting or diarrhea (multiple episodes)</div>
+                        <div class="urgency-indicator urgency-high"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="high">
+                        <div class="symptom-checkbox"></div>
+                        <div>Sudden aggression or personality change</div>
+                        <div class="urgency-indicator urgency-high"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="high">
+                        <div class="symptom-checkbox"></div>
+                        <div>Limping or signs of pain</div>
+                        <div class="urgency-indicator urgency-high"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="high">
+                        <div class="symptom-checkbox"></div>
+                        <div>Excessive thirst or urination</div>
+                        <div class="urgency-indicator urgency-high"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="high">
+                        <div class="symptom-checkbox"></div>
+                        <div>Difficulty breathing or panting at rest</div>
+                        <div class="urgency-indicator urgency-high"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="symptom-category">
+                <div class="category-title">
+                    <span>⚠️</span>
+                    Medium Priority - Monitor Closely
+                </div>
+                <div class="symptom-grid">
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="medium">
+                        <div class="symptom-checkbox"></div>
+                        <div>Changes in sleep patterns</div>
+                        <div class="urgency-indicator urgency-medium"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="medium">
+                        <div class="symptom-checkbox"></div>
+                        <div>Increased clinginess or withdrawal</div>
+                        <div class="urgency-indicator urgency-medium"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="medium">
+                        <div class="symptom-checkbox"></div>
+                        <div>Repetitive behaviors (spinning, tail chasing)</div>
+                        <div class="urgency-indicator urgency-medium"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="medium">
+                        <div class="symptom-checkbox"></div>
+                        <div>Decreased energy or playfulness</div>
+                        <div class="urgency-indicator urgency-medium"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="medium">
+                        <div class="symptom-checkbox"></div>
+                        <div>Senior dog (7+ years) with new behaviors</div>
+                        <div class="urgency-indicator urgency-medium"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="medium">
+                        <div class="symptom-checkbox"></div>
+                        <div>House training regression with accidents</div>
+                        <div class="urgency-indicator urgency-medium"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="symptom-category">
+                <div class="category-title">
+                    <span>🧠</span>
+                    Low Priority - Likely Behavioral
+                </div>
+                <div class="symptom-grid">
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="low">
+                        <div class="symptom-checkbox"></div>
+                        <div>Barking at specific triggers</div>
+                        <div class="urgency-indicator urgency-low"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="low">
+                        <div class="symptom-checkbox"></div>
+                        <div>Jumping on people during greetings</div>
+                        <div class="urgency-indicator urgency-low"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="low">
+                        <div class="symptom-checkbox"></div>
+                        <div>Pulling on leash during walks</div>
+                        <div class="urgency-indicator urgency-low"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="low">
+                        <div class="symptom-checkbox"></div>
+                        <div>Ignoring commands they used to know</div>
+                        <div class="urgency-indicator urgency-low"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="low">
+                        <div class="symptom-checkbox"></div>
+                        <div>Destructive behavior when alone</div>
+                        <div class="urgency-indicator urgency-low"></div>
+                    </div>
+                    <div class="symptom-item" onclick="toggleSymptom(this)" data-urgency="low">
+                        <div class="symptom-checkbox"></div>
+                        <div>Overstimulation or hyperactivity</div>
+                        <div class="urgency-indicator urgency-low"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-button" onclick="calculateRecommendation()">
+                🎯 Get My Recommendation
+            </button>
+        </div>
+
+        <div class="results-panel" id="results">
+            <div id="recommendation-content">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div class="vet-communication">
+            <div class="communication-title">
+                <span>💬</span>
+                How to Talk to Your Vet
+            </div>
+
+            <div class="script-box">
+                <div class="script-title">📋 What to Prepare Before the Call</div>
+                <div class="script-text">
+                    • Timeline: When did behaviors start?<br>
+                    • Triggers: What seems to set off the behavior?<br>
+                    • Frequency: How often does it happen?<br>
+                    • Physical symptoms: Any eating, drinking, sleep changes?<br>
+                    • Recent changes: New food, environment, routine?
+                </div>
+            </div>
+
+            <div class="script-box">
+                <div class="script-title">🗣️ Phone Script Example</div>
+                <div class="script-text">
+                    "Hi, I'm calling about [dog's name]. They've been showing [specific behavior] for [timeframe]. I'm wondering if this could be medical or if it's behavioral. They're [age] years old and this behavior [started suddenly/gradually]. Should I schedule an exam or try behavioral approaches first?"
+                </div>
+            </div>
+
+            <div class="script-box">
+                <div class="script-title">❓ Questions to Ask</div>
+                <div class="script-text">
+                    • "Could this be pain-related?"<br>
+                    • "Are there medical conditions that cause this behavior?"<br>
+                    • "Should we do any specific tests?"<br>
+                    • "If it's not medical, who do you recommend for behavior help?"
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-guide">
+            <div class="communication-title">
+                <span>⏰</span>
+                Decision Timeline Guide
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">🚨</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Immediate (Call Vet Today)</div>
+                    <div class="timeline-description">Multiple high-priority symptoms, sudden severe changes, or emergency signs</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">📞</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Within 2-3 Days</div>
+                    <div class="timeline-description">Medium-priority symptoms, senior dog changes, or any physical symptoms</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">📋</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Try Behavior Reset First (1-2 Weeks)</div>
+                    <div class="timeline-description">Only low-priority symptoms, gradual changes, clear triggers present</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">🔄</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Re-evaluate</div>
+                    <div class="timeline-description">If behavior reset doesn't show improvement in 2 weeks, schedule vet visit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="print-button" onclick="window.print()">
+        🖨️ Print Guide
+    </button>
+
+    <script>
+        let selectedSymptoms = {
+            high: 0,
+            medium: 0,
+            low: 0
+        };
+
+        function toggleSymptom(element) {
+            const urgency = element.getAttribute('data-urgency');
+            const checkbox = element.querySelector('.symptom-checkbox');
+            
+            if (element.classList.contains('selected')) {
+                // Deselecting
+                element.classList.remove('selected');
+                checkbox.textContent = '';
+                selectedSymptoms[urgency]--;
+            } else {
+                // Selecting
+                element.classList.add('selected');
+                checkbox.textContent = '✓';
+                selectedSymptoms[urgency]++;
+            }
+            
+            updateSymptomCount();
+        }
+
+        function updateSymptomCount() {
+            // Update button text to show progress
+            const button = document.querySelector('.calculate-button');
+            const total = selectedSymptoms.high + selectedSymptoms.medium + selectedSymptoms.low;
+            
+            if (total > 0) {
+                button.textContent = `🎯 Get Recommendation (${total} symptoms selected)`;
+            } else {
+                button.textContent = '🎯 Get My Recommendation';
+            }
+        }
+
+        function calculateRecommendation() {
+            const resultsPanel = document.getElementById('results');
+            const contentDiv = document.getElementById('recommendation-content');
+            
+            // Calculate recommendation based on selected symptoms
+            let recommendation = '';
+            let urgencyClass = '';
+            let icon = '';
+            
+            if (selectedSymptoms.high >= 2) {
+                recommendation = generateVetRecommendation();
+                urgencyClass = 'result-vet';
+                icon = '🏥';
+            } else if (selectedSymptoms.high >= 1 || selectedSymptoms.medium >= 3) {
+                recommendation = generateMixedRecommendation();
+                urgencyClass = 'result-mixed';
+                icon = '⚠️';
+            } else if (selectedSymptoms.medium >= 1 || selectedSymptoms.low >= 2) {
+                recommendation = generateBehaviorRecommendation();
+                urgencyClass = 'result-behavior';
+                icon = '🧠';
+            } else {
+                recommendation = generateNoSymptomsMessage();
+                urgencyClass = 'result-behavior';
+                icon = '✅';
+            }
+            
+            contentDiv.innerHTML = `
+                <div class="result-recommendation ${urgencyClass}">
+                    <div class="result-header">
+                        <span>${icon}</span>
+                        ${recommendation.title}
+                    </div>
+                    <p>${recommendation.description}</p>
+                    <ul class="action-steps">
+                        ${recommendation.actions.map(action => `<li>${action}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            resultsPanel.classList.add('active');
+            resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateVetRecommendation() {
+            return {
+                title: 'VET VISIT RECOMMENDED',
+                description: 'Based on your selections, there are multiple indicators that suggest a medical issue. It\'s best to rule out physical causes before addressing behavioral aspects.',
+                actions: [
+                    'Call your vet within 24-48 hours to schedule an exam',
+                    'Use the communication scripts provided above',
+                    'Document symptoms with dates and frequencies',
+                    'Bring a list of recent changes (food, environment, routine)',
+                    'Ask specifically about pain, hormonal changes, or age-related conditions',
+                    'If medical issues are ruled out, then focus on behavioral reset methods'
+                ]
+            };
+        }
+
+        function generateMixedRecommendation() {
+            return {
+                title: 'MIXED SIGNALS - MONITOR CLOSELY',
+                description: 'You have some concerning symptoms that could be medical, but also behavioral indicators. Start with a vet check while beginning gentle behavioral approaches.',
+                actions: [
+                    'Schedule a vet appointment within 3-5 days',
+                    'Meanwhile, start with environmental calm setup',
+                    'Use the 10-minute daily reset ritual from your main guide',
+                    'Track symptoms daily to see if they improve or worsen',
+                    'Avoid intensive training until medical clearance',
+                    'If vet clears medical issues, proceed with full behavioral reset'
+                ]
+            };
+        }
+
+        function generateBehaviorRecommendation() {
+            return {
+                title: 'LIKELY BEHAVIORAL - START RESET METHODS',
+                description: 'Your symptoms strongly suggest behavioral regression rather than medical issues. You can confidently start with your reset methods.',
+                actions: [
+                    'Begin the 5-Step Reset Method from your main guide immediately',
+                    'Use your Emergency Regression Rescue Plan for acute episodes',
+                    'Set up your calm home environment using the setup guide',
+                    'Track progress daily with your regression tracker',
+                    'Give the reset methods 2 full weeks to show improvement',
+                    'If no improvement after 2 weeks, consider a vet consultation'
+                ]
+            };
+        }
+
+        function generateNoSymptomsMessage() {
+            return {
+                title: 'NO MAJOR CONCERNS DETECTED',
+                description: 'Based on your selections, there don\'t appear to be urgent medical or behavioral concerns. This tool is most helpful when specific symptoms are present.',
+                actions: [
+                    'Continue monitoring your dog\'s behavior and health',
+                    'Use this tool again if new symptoms develop',
+                    'Maintain good preventive care with regular vet checkups',
+                    'Keep using your behavioral reset methods as maintenance',
+                    'Trust your instincts - you know your dog best',
+                    'Contact your vet if you have any concerns not covered here'
+                ]
+            };
+        }
+
+        // Add some interactive enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to path cards
+            document.querySelectorAll('.path-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Show helpful tip based on time of day
+            const hour = new Date().getHours();
+            if (hour >= 17 || hour <= 8) {
+                console.log('🌙 Evening/Night Tip: Many behavioral symptoms are more noticeable during calm hours. This is a great time to assess your dog objectively.');
+            } else {
+                console.log('☀️ Day Tip: Observe your dog during normal activities to get the most accurate symptom assessment.');
+            }
+        });
+
+        // Add progress saving
+        function saveAssessment() {
+            const assessmentData = {
+                symptoms: selectedSymptoms,
+                selectedItems: Array.from(document.querySelectorAll('.symptom-item.selected')).map(item => item.textContent.trim()),
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('vetBehaviorAssessment', JSON.stringify(assessmentData));
+        }
+
+        function loadSavedAssessment() {
+            const saved = localStorage.getItem('vetBehaviorAssessment');
+            if (saved) {
+                const data = JSON.parse(saved);
+                console.log('Previous assessment found:', data);
+                // Could restore previous selections if desired
+            }
+        }
+
+        // Auto-save when symptoms are selected
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.symptom-item')) {
+                setTimeout(saveAssessment, 100);
+            }
+        });
+
+        // Load any saved data
+        loadSavedAssessment();
+
+        // Add motivational messages based on user selections
+        function showEncouragement() {
+            const total = selectedSymptoms.high + selectedSymptoms.medium + selectedSymptoms.low;
+            
+            if (total === 1) {
+                console.log('💡 You\'re being proactive by checking this out - that\'s great pet parenting!');
+            } else if (total >= 3) {
+                console.log('📋 You\'re gathering good information. This detailed assessment will help you make the right decision.');
+            }
+        }
+
+        // Show encouragement after symptom selection
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.symptom-item')) {
+                setTimeout(showEncouragement, 500);
+            }
+        });
+    </script>
+</body>
+</html>
