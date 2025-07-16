@@ -14,7 +14,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #20b2aa 0%, #008b8b 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -50,14 +50,14 @@
 
         .value-badge {
             display: inline-block;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #20b2aa, #008b8b);
             color: white;
             padding: 10px 25px;
             border-radius: 25px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(32, 178, 170, 0.3);
         }
 
         .quick-decision {
@@ -119,7 +119,7 @@
         }
 
         .path-card.behavior {
-            border-color: #667eea;
+            border-color: #20b2aa;
         }
 
         .path-card:hover {
@@ -141,7 +141,7 @@
         }
 
         .behavior-path .path-header {
-            color: #667eea;
+            color: #20b2aa;
         }
 
         .symptom-checker {
@@ -174,7 +174,7 @@
             color: #2c3e50;
             margin-bottom: 15px;
             padding: 10px;
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(32, 178, 170, 0.1);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -200,19 +200,19 @@
         }
 
         .symptom-item:hover {
-            background: rgba(102, 126, 234, 0.05);
-            border-left-color: #667eea;
+            background: rgba(32, 178, 170, 0.05);
+            border-left-color: #20b2aa;
         }
 
         .symptom-item.selected {
-            background: rgba(102, 126, 234, 0.1);
-            border-left-color: #667eea;
+            background: rgba(32, 178, 170, 0.1);
+            border-left-color: #20b2aa;
         }
 
         .symptom-checkbox {
             width: 20px;
             height: 20px;
-            border: 2px solid #667eea;
+            border: 2px solid #20b2aa;
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -224,7 +224,7 @@
         }
 
         .symptom-item.selected .symptom-checkbox {
-            background: #667eea;
+            background: #20b2aa;
             color: white;
         }
 
@@ -279,8 +279,8 @@
         }
 
         .result-behavior {
-            background: rgba(102, 126, 234, 0.1);
-            border-color: #667eea;
+            background: rgba(32, 178, 170, 0.1);
+            border-color: #20b2aa;
         }
 
         .result-mixed {
@@ -308,7 +308,7 @@
             margin-bottom: 8px;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 5px;
-            border-left: 3px solid #667eea;
+            border-left: 3px solid #20b2aa;
         }
 
         .vet-communication {
@@ -339,7 +339,7 @@
 
         .script-title {
             font-weight: bold;
-            color: #667eea;
+            color: #20b2aa;
             margin-bottom: 10px;
         }
 
@@ -365,7 +365,7 @@
             margin-bottom: 15px;
             background: #f8f9fa;
             border-radius: 8px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #20b2aa;
         }
 
         .timeline-icon {
@@ -391,7 +391,7 @@
         }
 
         .calculate-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #20b2aa, #008b8b);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -406,27 +406,27 @@
 
         .calculate-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(32, 178, 170, 0.4);
         }
 
         .print-button {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #20b2aa, #008b8b);
             color: white;
             border: none;
             padding: 15px 25px;
             border-radius: 25px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(32, 178, 170, 0.3);
             transition: all 0.3s ease;
         }
 
         .print-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(32, 178, 170, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -907,16 +907,13 @@
                 timestamp: new Date().toISOString()
             };
             
-            localStorage.setItem('vetBehaviorAssessment', JSON.stringify(assessmentData));
+            // Note: localStorage not available in Claude artifacts
+            console.log('Assessment saved:', assessmentData);
         }
 
         function loadSavedAssessment() {
-            const saved = localStorage.getItem('vetBehaviorAssessment');
-            if (saved) {
-                const data = JSON.parse(saved);
-                console.log('Previous assessment found:', data);
-                // Could restore previous selections if desired
-            }
+            // Note: localStorage not available in Claude artifacts
+            console.log('Loading saved assessment...');
         }
 
         // Auto-save when symptoms are selected
